@@ -1,0 +1,24 @@
+# Python
+*.pyc
+__pycache__/
+
+# Environment variables and secrets
+.env
+.env.*
+*.env
+secrets.*
+*.secrets
+
+# macOS system files
+.DS_Store
+
+# Virtual environments
+intake-venv/
+venv/
+ENV/
+
+# VSCode settings
+.vscode/
+
+# Other common ignores
+*.log 

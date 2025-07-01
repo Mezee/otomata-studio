@@ -1,0 +1,2185 @@
+[
+  {
+    "createdAt": "2025-05-25T20:27:13.952Z",
+    "updatedAt": "2025-06-04T15:03:25.606Z",
+    "id": "UYwe8qdvlKh77t7R",
+    "name": "Vapi Sprint Endpoints",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "market-research",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -400,
+          200
+        ],
+        "id": "5b4cf7f8-0505-418f-a2c1-63e23a42f0f3",
+        "name": "market-research",
+        "webhookId": "c70eae4f-4120-4a9b-bb37-1e2add996356"
+      },
+      {
+        "parameters": {
+          "toolDescription": "Search the web",
+          "method": "POST",
+          "url": "https://api.tavily.com/search",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer YOUR_TAVILY_API_TOKEN_HERE"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "query",
+                "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequestTool",
+        "typeVersion": 4.2,
+        "position": [
+          416,
+          420
+        ],
+        "id": "4999067d-8d1c-408c-badd-85860589c57d",
+        "name": "web search tool"
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.toolThink",
+        "typeVersion": 1,
+        "position": [
+          536,
+          420
+        ],
+        "id": "fcfc9b14-b573-48c6-8767-e4dfde3563cb",
+        "name": "Think Pad"
+      },
+      {
+        "parameters": {
+          "model": "openai/gpt-4.1-mini",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+        "typeVersion": 1,
+        "position": [
+          128,
+          320
+        ],
+        "id": "0a9623d4-7635-46df-8e62-54a71e40d5af",
+        "name": "OpenRouter Chat Model",
+        "credentials": {
+          "openRouterApi": {
+            "id": "0yfaapxeIUK1TNZx",
+            "name": "OpenRouter account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.3,
+        "position": [
+          1592,
+          200
+        ],
+        "id": "31ac3a59-24f1-4051-91cc-db504fa2f630",
+        "name": "Respond to Webhook"
+      },
+      {
+        "parameters": {
+          "model": "anthropic/claude-sonnet-4",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+        "typeVersion": 1,
+        "position": [
+          -180,
+          780
+        ],
+        "id": "d7859f07-014b-4880-a089-8c4fd6fec4e8",
+        "name": "OpenRouter Chat Model1",
+        "credentials": {
+          "openRouterApi": {
+            "id": "0yfaapxeIUK1TNZx",
+            "name": "OpenRouter account"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.toolThink",
+        "typeVersion": 1,
+        "position": [
+          -60,
+          780
+        ],
+        "id": "d5c27a73-1b4c-4219-82fa-0faf33c22635",
+        "name": "Think"
+      },
+      {
+        "parameters": {
+          "toolDescription": "Search the web",
+          "method": "POST",
+          "url": "https://api.tavily.com/search",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer YOUR_TAVILY_API_TOKEN_HERE"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "query",
+                "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequestTool",
+        "typeVersion": 4.2,
+        "position": [
+          60,
+          780
+        ],
+        "id": "4641978d-0919-4f20-bb8b-5c22f28413a1",
+        "name": "web search tool1"
+      },
+      {
+        "parameters": {
+          "description": "Call this agent tool to search youtube. ",
+          "workflowId": {
+            "__rl": true,
+            "value": "gZb3CX0vj1PbopO1",
+            "mode": "list",
+            "cachedResultName": "Youtube Research Agent"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+        "typeVersion": 2.2,
+        "position": [
+          180,
+          780
+        ],
+        "id": "1c713d78-2138-4163-ac0d-667a3412f46f",
+        "name": "Youtube Agent"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Close the users gap to goal in 14 days:\nDate {{ $now }}\n\nUser profile + Goldilocks venture:\n{{ JSON.stringify($json.body.service_profile) }}\n\n",
+          "hasOutputParser": true,
+          "options": {
+            "systemMessage": "="
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 2,
+        "position": [
+          -88,
+          560
+        ],
+        "id": "287fd00d-ee58-4844-b292-4a42f3833179",
+        "name": "SMART Sprint Agent"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "smart_sprint",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -400,
+          660
+        ],
+        "id": "5440cb72-ca81-463c-a8e0-453199d285c8",
+        "name": "smart_sprint",
+        "webhookId": "c70eae4f-4120-4a9b-bb37-1e2add996356"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "subreddit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subreddit', ``, 'string') }}",
+          "postId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Post_ID', ``, 'string') }}"
+        },
+        "type": "n8n-nodes-base.redditTool",
+        "typeVersion": 1,
+        "position": [
+          656,
+          420
+        ],
+        "id": "912c0184-7b31-4cdd-aec1-fc5d699411b1",
+        "name": "Get Reddit Post",
+        "credentials": {
+          "redditOAuth2Api": {
+            "id": "R1lChmznsaD0zN5Z",
+            "name": "Reddit account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "subreddit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subreddit', ``, 'string') }}",
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+          "filters": {}
+        },
+        "type": "n8n-nodes-base.redditTool",
+        "typeVersion": 1,
+        "position": [
+          776,
+          420
+        ],
+        "id": "c7145448-f114-444a-9d89-894aa5d13e32",
+        "name": "Search Reddit Posts",
+        "credentials": {
+          "redditOAuth2Api": {
+            "id": "R1lChmznsaD0zN5Z",
+            "name": "Reddit account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "postComment",
+          "operation": "getAll",
+          "subreddit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subreddit', ``, 'string') }}",
+          "postId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Post_ID', ``, 'string') }}",
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}"
+        },
+        "type": "n8n-nodes-base.redditTool",
+        "typeVersion": 1,
+        "position": [
+          896,
+          420
+        ],
+        "id": "f13a91f2-f9b7-4b29-9817-004986977d75",
+        "name": "Get Reddit Comments",
+        "credentials": {
+          "redditOAuth2Api": {
+            "id": "R1lChmznsaD0zN5Z",
+            "name": "Reddit account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "subreddit",
+          "operation": "getAll",
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+          "filters": {}
+        },
+        "type": "n8n-nodes-base.redditTool",
+        "typeVersion": 1,
+        "position": [
+          1016,
+          420
+        ],
+        "id": "7bf0740c-ae1a-40ba-b512-644e04f43668",
+        "name": "Get Sub Reddit"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "bdc69fcf-e4b0-492e-95f4-f0d91dc334bb",
+                "name": "user_insights",
+                "value": "={{ JSON.stringify($json.body) }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -180,
+          200
+        ],
+        "id": "e1e6d0cf-246b-4480-8cbe-32a39d49a33e",
+        "name": "user_insights"
+      },
+      {
+        "parameters": {
+          "model": "openai/gpt-4.1",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+        "typeVersion": 1,
+        "position": [
+          1304,
+          420
+        ],
+        "id": "f82e192b-c990-41e3-a7e1-d1428c6193db",
+        "name": "OpenRouter Chat Model3",
+        "credentials": {
+          "openRouterApi": {
+            "id": "0yfaapxeIUK1TNZx",
+            "name": "OpenRouter account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=User Profile:\n{{ $('user_insights').item.json.user_insights }}\n\nCustomer Pain points:\n{{ $json.output }}",
+          "options": {
+            "systemMessage": "=**Market Opportunity Discovery Prompt**\n\nYou are an AI Market-Opportunity Scout. Your goal: uncover and validate fast-win service opportunities (\u201cGoldilocks Ventures\u201d) for the user.\n\n---\n\n1. **Web Market Scan**\n   Use web tools to research:\n\n   * Near-future demand trends\n   * Existing solutions and their pricing\n   * Dominant pricing strategies\n   * Common business models\n   * Platform or regulatory constraints\n     *(Keep each search short, human-sounding, under 5 queries.)*\n\n2. **Goldilocks Venture Ideation**\n   From your research, propose **3** ventures that:\n\n   * Sit at the perfect intersection of the user\u2019s skills and the market's need\n   * Can deliver ROI within 14 days\n   * Are digital-first with low overhead and minimal regulation\n   * Respect the user\u2019s certifications and constraints\n\n**make the output thorough yet concise**\n\n3. **JSON-Only Output**\n   Return exactly this structure\u2014no extra text:\n\n```json\n{\n  \"insights\": [\"string\", ...],\n  \"target_icp\": {\n    \"industry\": \"string\",\n    \"revenue\": \"string\",\n    \"team_size\": \"string\",\n    \"pain_points\": [\"string\", ...]\n  },\n  \"goldilocks_venture(int)\": [\n    {\n      \"name\": \"string\",\n      \"pitch\": \"string\",\n      \"target_customer\": {\n        \"industry\": \"string\",\n        \"revenue\": \"string\",\n        \"team_size\": \"string\",\n        \"pain_points\": [\"string\", ...]\n      }\n    }\n  ]\n}\n```\n"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 2,
+        "position": [
+          1216,
+          200
+        ],
+        "id": "796abd0b-9db2-4f95-aaf2-c3e53926560c",
+        "name": "Goldilocks Venture Generator"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=user_insights:\n{{ $json.user_insights }}",
+          "messages": {
+            "messageValues": [
+              {
+                "message": "=Your task is to:  1. Assess where the user is starting from. uncover profile insights including specific skills, work ethic, preferences and unique positioning.  1a. hypothesize a short list of client personas that might be in deep need or otherwise benefit from users skills.\n\nYour answer should be very well though out, very short and concise."
+              }
+            ]
+          },
+          "batching": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.7,
+        "position": [
+          40,
+          100
+        ],
+        "id": "30ef9c98-788c-4649-b4b8-178332975290",
+        "name": "client profile generator"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=User insights:\n{{ $json.text }}",
+          "options": {
+            "systemMessage": "=## Available Tools\n\nReddit Tools:\nSearch Reddit Posts\n\u2192 Search top posts in a subreddit based on keywords.\n\nGet Reddit Post\n\u2192 Retrieve a single post and its metadata (title, upvotes, etc.).\n\nGet Reddit Comments\n\u2192 Fetch comments for a Reddit post using its subreddit and postId.\n\n## Get Sub Reddit\n\n\u2192 Browse or list subreddits for idea discovery or validation.\n\nSearch queries from those client\u2019s perspective.\n\n   * Use emotional triggers: annoying [problem]\n   * Aspirational goals: wish I could [outcome]\n   * Pain points: anyone else hate when [problem]\n\n## Notes\n\n- Keep the queries short and human sounding for best results.\n- **Do not** add quotes around the query\n- **limit the searches to les than < 5**\n\n1. Search Reddit using these queries. make a note of:\n\n   * Common emotional themes\n   * Recurring frustrations\n   * Language patterns\n   * Unique gaps in service\n   * Pain intensity (via engagement)\n   * Mentioned competitors/solutions\n\n2. Organize insights into:\n\n   * Primary pain point (1)\n   * Secondary pain points (2)\n   * Emerging pain points (2)\n   * Unmet needs (2)\n"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 2,
+        "position": [
+          628,
+          200
+        ],
+        "id": "4d7bbe62-67e5-4b81-a9c8-78160081a38a",
+        "name": "painpoint finder"
+      },
+      {
+        "parameters": {
+          "content": "## market_insights\nAnalyzes the user\u2019s service profile and aligns it with real-time market data. Returns a list of validated service opportunities (Goldilocks Ventures), including ideal customers, positioning, pricing, and fast-launch potential.",
+          "height": 200,
+          "width": 320
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -1040,
+          -80
+        ],
+        "typeVersion": 1,
+        "id": "ad32c30e-b994-487a-99e2-f28266b040c3",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "## smart_sprint\nAnalyzes the user\u2019s service profile and aligns it with real-time market data. Returns a list of validated service opportunities (Goldilocks Ventures), including ideal customers, positioning, pricing, and fast-launch potential. The report will be generated in the background but the tool will return true or false based on whether the request body met all requirements.",
+          "height": 200,
+          "width": 440
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -1040,
+          480
+        ],
+        "typeVersion": 1,
+        "id": "ada989a3-db70-43fe-8e48-1400357c721e",
+        "name": "Sticky Note1"
+      }
+    ],
+    "connections": {
+      "market-research": {
+        "main": [
+          [
+            {
+              "node": "user_insights",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "web search tool": {
+        "ai_tool": [
+          [
+            {
+              "node": "painpoint finder",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Think Pad": {
+        "ai_tool": [
+          [
+            {
+              "node": "painpoint finder",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenRouter Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "painpoint finder",
+              "type": "ai_languageModel",
+              "index": 0
+            },
+            {
+              "node": "client profile generator",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenRouter Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "SMART Sprint Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Think": {
+        "ai_tool": [
+          [
+            {
+              "node": "SMART Sprint Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "web search tool1": {
+        "ai_tool": [
+          [
+            {
+              "node": "SMART Sprint Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Youtube Agent": {
+        "ai_tool": [
+          [
+            {
+              "node": "SMART Sprint Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SMART Sprint Agent": {
+        "main": [
+          []
+        ]
+      },
+      "Respond to Webhook": {
+        "main": [
+          [],
+          []
+        ]
+      },
+      "smart_sprint": {
+        "main": [
+          [
+            {
+              "node": "SMART Sprint Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Reddit Post": {
+        "ai_tool": [
+          [
+            {
+              "node": "painpoint finder",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search Reddit Posts": {
+        "ai_tool": [
+          [
+            {
+              "node": "painpoint finder",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Reddit Comments": {
+        "ai_tool": [
+          [
+            {
+              "node": "painpoint finder",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Sub Reddit": {
+        "ai_tool": [
+          [
+            {
+              "node": "painpoint finder",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "user_insights": {
+        "main": [
+          [
+            {
+              "node": "client profile generator",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenRouter Chat Model3": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Goldilocks Venture Generator",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Goldilocks Venture Generator": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "client profile generator": {
+        "main": [
+          [
+            {
+              "node": "painpoint finder",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "painpoint finder": {
+        "main": [
+          [
+            {
+              "node": "Goldilocks Venture Generator",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+      "smart_sprint": [
+        {
+          "json": {
+            "headers": {
+              "host": "n8n-zojsl-u45830.vm.elestio.app",
+              "x-real-ip": "209.15.128.3",
+              "x-forwarded-for": "209.15.128.3",
+              "x-forwarded-proto": "https",
+              "x-forwarded-port": "443",
+              "connection": "close",
+              "content-length": "1135",
+              "sec-ch-ua-platform": "\"macOS\"",
+              "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36",
+              "sec-ch-ua": "\"Chromium\";v=\"136\", \"Google Chrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+              "content-type": "application/json",
+              "sec-ch-ua-mobile": "?0",
+              "accept": "*/*",
+              "origin": "https://dashboard.vapi.ai",
+              "sec-fetch-site": "cross-site",
+              "sec-fetch-mode": "cors",
+              "sec-fetch-dest": "empty",
+              "referer": "https://dashboard.vapi.ai/",
+              "accept-encoding": "gzip, deflate, br, zstd",
+              "accept-language": "en-US,en;q=0.9",
+              "priority": "u=1, i"
+            },
+            "params": {},
+            "query": {},
+            "body": {
+              "service_profile": {
+                "specialty": "n8n Automation Consulting",
+                "certifications": [
+                  "n8n Certified Expert"
+                ],
+                "work_ethic": {
+                  "hours_per_day": 4,
+                  "peak_hours": "09:00\u201313:00",
+                  "style": "Sprinter",
+                  "discipline_rating": 8,
+                  "constraints": [
+                    "Limited to weekday work",
+                    "$500 marketing budget"
+                  ]
+                }
+              },
+              "chosen_venture": {
+                "name": "E-commerce Automation Advisor",
+                "pitch": "Helping small e-commerce brands automate repetitive workflows using n8n without writing code.",
+                "target_customer": {
+                  "industry": "e-commerce",
+                  "revenue": "100K\u20131M",
+                  "team_size": "1\u20135",
+                  "pain_points": [
+                    "manual order fulfillment",
+                    "repetitive customer emails",
+                    "inventory sync issues"
+                  ]
+                },
+                "14_day_profit_plan": [
+                  "Create 3 use-case case studies",
+                  "Launch outreach to 150 Shopify stores",
+                  "Publish 6 LinkedIn posts & 7 Twitter threads",
+                  "Book 9 discovery calls",
+                  "Close 3 new automation clients"
+                ]
+              },
+              "distribution_strategy": {
+                "on_camera": false,
+                "platforms": [
+                  "LinkedIn",
+                  "Twitter"
+                ],
+                "content_focus": [
+                  "step-by-step automation breakdowns",
+                  "before/after workflow visuals",
+                  "common e-com automation mistakes"
+                ],
+                "positioning_notes": "Present as a no-fluff technical partner who solves invisible time leaks with smart automation."
+              }
+            },
+            "webhookUrl": "https://n8n-zojsl-u45830.vm.elestio.app/webhook/smart_sprint",
+            "executionMode": "production"
+          }
+        }
+      ],
+      "market-research": [
+        {
+          "json": {
+            "headers": {
+              "host": "n8n-zojsl-u45830.vm.elestio.app",
+              "x-real-ip": "35.87.79.221",
+              "x-forwarded-for": "35.87.79.221",
+              "x-forwarded-proto": "https",
+              "x-forwarded-port": "443",
+              "connection": "close",
+              "content-length": "21059",
+              "accept": "application/json, text/plain, */*",
+              "content-type": "application/json",
+              "x-vapi-secret": "",
+              "cookie": "callId=5e39f3e3-1213-4ef0-88b5-d77dd086b98a",
+              "user-agent": "axios/1.8.3",
+              "accept-encoding": "gzip, compress, deflate, br",
+              "sentry-trace": "0460972e5ea24d39a4e503cc7081509e-b43e91919bfb2993",
+              "baggage": "sentry-environment=production,sentry-public_key=a0021577936aec367b16615ad816c078,sentry-trace_id=0460972e5ea24d39a4e503cc7081509e",
+              "traceparent": "00-7fee6338b778fbddfbb886a530251161-c302f099b6c300b0-01"
+            },
+            "params": {},
+            "query": {},
+            "body": {
+              "message": {
+                "timestamp": 1748542735230,
+                "type": "tool-calls",
+                "toolCalls": [
+                  {
+                    "id": "call_91ZC4SjSSCNJzpn29K66MxK8",
+                    "type": "function",
+                    "function": {
+                      "name": "market_research",
+                      "arguments": {
+                        "user_insights": "specialty: AI automations, branding; certifications: none mentioned; interests: psychology, marketing, personal development; work_style: Sprinter; daily_hours_available: 7; constraints: budget $200"
+                      }
+                    }
+                  }
+                ],
+                "toolCallList": [
+                  {
+                    "id": "call_91ZC4SjSSCNJzpn29K66MxK8",
+                    "type": "function",
+                    "function": {
+                      "name": "market_research",
+                      "arguments": {
+                        "user_insights": "specialty: AI automations, branding; certifications: none mentioned; interests: psychology, marketing, personal development; work_style: Sprinter; daily_hours_available: 7; constraints: budget $200"
+                      }
+                    }
+                  }
+                ],
+                "toolWithToolCallList": [
+                  {
+                    "type": "function",
+                    "function": {
+                      "name": "market_research",
+                      "strict": false,
+                      "parameters": {
+                        "type": "object",
+                        "required": [
+                          "user_insights"
+                        ],
+                        "properties": {
+                          "user_insights": {
+                            "type": "string",
+                            "description": "{\n  \"specialty\": \"string\",\n  \"certifications\": [\"string\"],\n  \"interests\": [\"string\"],\n  \"work_style\": \"Marathoner | Sprinter | Dabbler\",\n  \"daily_hours_available\": number,\n  \"constraints\": [\"string\"]\n}"
+                          }
+                        }
+                      },
+                      "description": "Analyzes the user\u2019s service profile and aligns it with real-time market data. Returns a list of validated service opportunities (Goldilocks Ventures), including ideal customers, positioning, pricing, and fast-launch potential."
+                    },
+                    "async": true,
+                    "server": {
+                      "url": "https://n8n-zojsl-u45830.vm.elestio.app/webhook/market-research",
+                      "headers": {}
+                    },
+                    "messages": [],
+                    "toolCall": {
+                      "id": "call_91ZC4SjSSCNJzpn29K66MxK8",
+                      "type": "function",
+                      "function": {
+                        "name": "market_research",
+                        "arguments": {
+                          "user_insights": "specialty: AI automations, branding; certifications: none mentioned; interests: psychology, marketing, personal development; work_style: Sprinter; daily_hours_available: 7; constraints: budget $200"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "artifact": {
+                  "messages": [
+                    {
+                      "role": "system",
+                      "message": "## \ud83d\ude80 ROLE\n\nYou\u2019re **Houston** \u2013 part coach, part operator.\nObjective: guide a natural conversation that fills the `goal_gap` object and triggers the `smart_sprint` tool.\n\n---\n\n## \ud83e\udde0 1 \u00b7 USER SKILL ASSESSMENT\n\n1. **Open friendly:**\n\n   > \u201cWhat\u2019s something you\u2019re great at that most people find hard?\u201d\n\n2. **Dig deeper, one question at a time:**\n\n   * \u201cAny proof points \u2013 projects, results, certificates?\u201d\n   * \u201cWhat topics or tools do you nerd out on?\u201d\n\n3. **If unsure:**\n\n   > \u201cNo worries. Which markets or problems simply *interest* you?\u201d\n\n4. **Check-in:**\n\n   > \u201cAll clear so far?\u201d \u2013 wait for yes before moving on.\n\n---\n\n## \ud83d\udd0b 2 \u00b7 WORKSTYLE CHECK-IN\n\n> \u201cQuick rhythm check \u2013 short answers are fine.\u201d\n\nAsk **one question, wait, then the next**:\n\n1. Focus hours per day?\n2. Peak energy: morning / afternoon / night?\n3. Preference: steady pace or intense sprints?\n4. Self-discipline 1-10?\n5. Constraints (job, family, budget, etc.)?\n\n**Summarise & confirm:**\n\n> \u201cSounds like a **\\[Sprinter/Marathoner...",
+                      "time": 1748542615969,
+                      "secondsFromStart": 0
+                    },
+                    {
+                      "role": "bot",
+                      "message": "Hey. Are you ready to start?",
+                      "time": 1748542617403,
+                      "endTime": 1748542618753,
+                      "secondsFromStart": 1.1999999,
+                      "duration": 1120,
+                      "source": ""
+                    },
+                    {
+                      "role": "user",
+                      "message": "Yeah. Let's do it.",
+                      "time": 1748542619553,
+                      "endTime": 1748542620353,
+                      "secondsFromStart": 3.35,
+                      "duration": 800
+                    },
+                    {
+                      "role": "bot",
+                      "message": "Great. Let's start with something easy. What's something you're great at that most people find hard?",
+                      "time": 1748542622102.9995,
+                      "endTime": 1748542626643.001,
+                      "secondsFromStart": 5.8999996,
+                      "duration": 4320.00146484375,
+                      "source": ""
+                    },
+                    {
+                      "role": "user",
+                      "message": "AI automations and branding.",
+                      "time": 1748542628223,
+                      "endTime": 1748542630913,
+                      "secondsFromStart": 12.02,
+                      "duration": 2160
+                    },
+                    {
+                      "role": "bot",
+                      "message": "Nathis, AI automations, branding are both hot skills. Any proof points you can share like projects, results, or certificates.",
+                      "time": 1748542633123,
+                      "endTime": 1748542640633,
+                      "secondsFromStart": 16.92,
+                      "duration": 6800.0009765625,
+                      "source": ""
+                    },
+                    {
+                      "role": "user",
+                      "message": "I've created, uh, over 50 animations or 50 automations in the last 5 years.",
+                      "time": 1748542641623,
+                      "endTime": 1748542647033,
+                      "secondsFromStart": 25.42,
+                      "duration": 4560.001953125
+                    },
+                    {
+                      "role": "bot",
+                      "message": "Nice. That's solid experience. About topics or tools you really nerd out on within AI automations and branding?",
+                      "time": 1748542650563,
+                      "endTime": 1748542657173,
+                      "secondsFromStart": 34.36,
+                      "duration": 5839.9970703125,
+                      "source": ""
+                    },
+                    {
+                      "role": "user",
+                      "message": "Psychology and getting",
+                      "time": 1748542658633,
+                      "endTime": 1748542661233,
+                      "secondsFromStart": 42.43,
+                      "duration": 1840
+                    },
+                    {
+                      "role": "bot",
+                      "message": "Looks like your message got cut off. Were saying you",
+                      "time": 1748542664023,
+                      "endTime": 1748542666943,
+                      "secondsFromStart": 47.82,
+                      "duration": 2559.998046875,
+                      "source": ""
+                    },
+                    {
+                      "role": "user",
+                      "message": "I said psychology and marketing. Also personal development.",
+                      "time": 1748542666653,
+                      "endTime": 1748542671233,
+                      "secondsFromStart": 50.45,
+                      "duration": 3280
+                    },
+                    {
+                      "role": "bot",
+                      "message": "Perfect. Psychology, marketing, and personal development tie in well with AI automations and branding. All clear so far.",
+                      "time": 1748542674113,
+                      "endTime": 1748542680502.995,
+                      "secondsFromStart": 57.91,
+                      "duration": 5919.9970703125,
+                      "source": ""
+                    },
+                    {
+                      "role": "user",
+                      "message": "Yeah.",
+                      "time": 1748542688513,
+                      "endTime": 1748542688913,
+                      "secondsFromStart": 72.31,
+                      "duration": 400
+                    },
+                    {
+                      "role": "bot",
+                      "message": "Quick rhythm check. Short answers are fine. 1. How many focus hours per day can you dedicate to this?",
+                      "time": 1748542691903,
+                      "endTime": 1748542697713,
+                      "secondsFromStart": 75.7,
+                      "duration": 4800.0048828125,
+                      "source": ""
+                    },
+                    {
+                      "role": "user",
+                      "message": "6 to 8 hours.",
+                      "time": 1748542700133,
+                      "endTime": 1748542701173,
+                      "secondsFromStart": 83.93,
+                      "duration": 1040
+                    },
+                    {
+                      "role": "bot",
+                      "message": "2. When is your peak energy time? Morning, afternoon, or night?",
+                      "time": 1748542702142.995,
+                      "endTime": 1748542705503,
+                      "secondsFromStart": 85.939995,
+                      "duration": 2960.0048828125,
+                      "source": ""
+                    },
+                    {
+                      "role": "user",
+                      "message": "Uh, the morning.",
+                      "time": 1748542707023,
+                      "endTime": 1748542707583,
+                      "secondsFromStart": 90.82,
+                      "duration": 560
+                    },
+                    {
+                      "role": "bot",
+                      "message": "3. Do you prefer a steady work pace or intense sprints?",
+                      "time": 1748542709083,
+                      "endTime": 1748542712963,
+                      "secondsFromStart": 92.88,
+                      "duration": 3359.985107421875,
+                      "source": ""
+                    },
+                    {
+                      "role": "user",
+                      "message": "Sprint.",
+                      "time": 1748542714383,
+                      "endTime": 1748542714703,
+                      "secondsFromStart": 98.18,
+                      "duration": 320
+                    },
+                    {
+                      "role": "bot",
+                      "message": "4, On a scale of 1 to 10, how would you rate your self discipline?",
+                      "time": 1748542716043,
+                      "endTime": 1748542720163,
+                      "secondsFromStart": 99.84,
+                      "duration": 3740,
+                      "source": ""
+                    },
+                    {
+                      "role": "user",
+                      "message": "5.",
+                      "time": 1748542722223.004,
+                      "endTime": 1748542722703,
+                      "secondsFromStart": 106.020004,
+                      "duration": 479.99609375
+                    },
+                    {
+                      "role": "bot",
+                      "message": "5. Any constraints like job, family, or budget we should know about?",
+                      "time": 1748542725673,
+                      "endTime": 1748542729293,
+                      "secondsFromStart": 109.47,
+                      "duration": 3120,
+                      "source": ""
+                    },
+                    {
+                      "role": "user",
+                      "message": "Let's keep this to a 200 dollar budget.",
+                      "time": 1748542730373,
+                      "endTime": 1748542732373,
+                      "secondsFromStart": 114.17,
+                      "duration": 2000
+                    },
+                    {
+                      "toolCalls": [
+                        {
+                          "id": "call_91ZC4SjSSCNJzpn29K66MxK8",
+                          "type": "function",
+                          "function": {
+                            "name": "market_research",
+                            "arguments": "{\n  \"user_insights\": \"specialty: AI automations, branding; certifications: none mentioned; interests: psychology, marketing, personal development; work_style: Sprinter; daily_hours_available: 7; constraints: budget $200\"\n}"
+                          }
+                        }
+                      ],
+                      "role": "tool_calls",
+                      "message": "",
+                      "time": 1748542735228,
+                      "secondsFromStart": 116.994
+                    }
+                  ],
+                  "messagesOpenAIFormatted": [
+                    {
+                      "role": "system",
+                      "content": "## \ud83d\ude80 ROLE\n\nYou\u2019re **Houston** \u2013 part coach, part operator.\nObjective: guide a natural conversation that fills the `goal_gap` object and triggers the `smart_sprint` tool.\n\n---\n\n## \ud83e\udde0 1 \u00b7 USER SKILL ASSESSMENT\n\n1. **Open friendly:**\n\n   > \u201cWhat\u2019s something you\u2019re great at that most people find hard?\u201d\n\n2. **Dig deeper, one question at a time:**\n\n   * \u201cAny proof points \u2013 projects, results, certificates?\u201d\n   * \u201cWhat topics or tools do you nerd out on?\u201d\n\n3. **If unsure:**\n\n   > \u201cNo worries. Which markets or problems simply *interest* you?\u201d\n\n4. **Check-in:**\n\n   > \u201cAll clear so far?\u201d \u2013 wait for yes before moving on.\n\n---\n\n## \ud83d\udd0b 2 \u00b7 WORKSTYLE CHECK-IN\n\n> \u201cQuick rhythm check \u2013 short answers are fine.\u201d\n\nAsk **one question, wait, then the next**:\n\n1. Focus hours per day?\n2. Peak energy: morning / afternoon / night?\n3. Preference: steady pace or intense sprints?\n4. Self-discipline 1-10?\n5. Constraints (job, family, budget, etc.)?\n\n**Summarise & confirm:**\n\n> \u201cSounds like a **\\[Sprinter/Marathoner..."
+                    },
+                    {
+                      "role": "assistant",
+                      "content": "Hey. Are you ready to start?"
+                    },
+                    {
+                      "role": "user",
+                      "content": "Yeah. Let's do it."
+                    },
+                    {
+                      "role": "assistant",
+                      "content": "Great. Let's start with something easy. What's something you're great at that most people find hard?"
+                    },
+                    {
+                      "role": "user",
+                      "content": "AI automations and branding."
+                    },
+                    {
+                      "role": "assistant",
+                      "content": "Nathis, AI automations, branding are both hot skills. Any proof points you can share like projects, results, or certificates."
+                    },
+                    {
+                      "role": "user",
+                      "content": "I've created, uh, over 50 animations or 50 automations in the last 5 years."
+                    },
+                    {
+                      "role": "assistant",
+                      "content": "Nice. That's solid experience. About topics or tools you really nerd out on within AI automations and branding?"
+                    },
+                    {
+                      "role": "user",
+                      "content": "Psychology and getting"
+                    },
+                    {
+                      "role": "assistant",
+                      "content": "Looks like your message got cut off. Were saying you"
+                    },
+                    {
+                      "role": "user",
+                      "content": "I said psychology and marketing. Also personal development."
+                    },
+                    {
+                      "role": "assistant",
+                      "content": "Perfect. Psychology, marketing, and personal development tie in well with AI automations and branding. All clear so far."
+                    },
+                    {
+                      "role": "user",
+                      "content": "Yeah."
+                    },
+                    {
+                      "role": "assistant",
+                      "content": "Quick rhythm check. Short answers are fine. 1. How many focus hours per day can you dedicate to this?"
+                    },
+                    {
+                      "role": "user",
+                      "content": "6 to 8 hours."
+                    },
+                    {
+                      "role": "assistant",
+                      "content": "2. When is your peak energy time? Morning, afternoon, or night?"
+                    },
+                    {
+                      "role": "user",
+                      "content": "Uh, the morning."
+                    },
+                    {
+                      "role": "assistant",
+                      "content": "3. Do you prefer a steady work pace or intense sprints?"
+                    },
+                    {
+                      "role": "user",
+                      "content": "Sprint."
+                    },
+                    {
+                      "role": "assistant",
+                      "content": "4, On a scale of 1 to 10, how would you rate your self discipline?"
+                    },
+                    {
+                      "role": "user",
+                      "content": "5."
+                    },
+                    {
+                      "role": "assistant",
+                      "content": "5. Any constraints like job, family, or budget we should know about?"
+                    },
+                    {
+                      "role": "user",
+                      "content": "Let's keep this to a 200 dollar budget."
+                    },
+                    {
+                      "role": "assistant",
+                      "tool_calls": [
+                        {
+                          "id": "call_91ZC4SjSSCNJzpn29K66MxK8",
+                          "type": "function",
+                          "function": {
+                            "name": "market_research",
+                            "arguments": "{\n  \"user_insights\": \"specialty: AI automations, branding; certifications: none mentioned; interests: psychology, marketing, personal development; work_style: Sprinter; daily_hours_available: 7; constraints: budget $200\"\n}"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "role": "tool",
+                      "tool_call_id": "call_91ZC4SjSSCNJzpn29K66MxK8",
+                      "content": "Tool Result Still Pending But Proceed Further If Possible."
+                    }
+                  ]
+                },
+                "call": {
+                  "id": "5e39f3e3-1213-4ef0-88b5-d77dd086b98a",
+                  "orgId": "63d7f49f-550e-4cd2-96a8-bad5c0f2d68f",
+                  "createdAt": "2025-05-29T18:16:55.287Z",
+                  "updatedAt": "2025-05-29T18:16:55.287Z",
+                  "type": "webCall",
+                  "monitor": {
+                    "listenUrl": "wss://phone-call-websocket.aws-us-west-2-backend-production2.vapi.ai/5e39f3e3-1213-4ef0-88b5-d77dd086b98a/listen",
+                    "controlUrl": "https://phone-call-websocket.aws-us-west-2-backend-production2.vapi.ai/5e39f3e3-1213-4ef0-88b5-d77dd086b98a/control"
+                  },
+                  "transport": {
+                    "provider": "daily",
+                    "assistantVideoEnabled": false,
+                    "callUrl": "https://vapi.daily.co/rdREW0F7iuqONmtbzxdE"
+                  },
+                  "webCallUrl": "https://vapi.daily.co/rdREW0F7iuqONmtbzxdE",
+                  "status": "queued",
+                  "assistant": {
+                    "name": "Houston",
+                    "transcriber": {
+                      "model": "nova-3",
+                      "language": "en",
+                      "provider": "deepgram"
+                    },
+                    "model": {
+                      "model": "gpt-4.1-mini",
+                      "temperature": 0.5,
+                      "messages": [
+                        {
+                          "content": "## \ud83d\ude80 ROLE\n\nYou\u2019re **Houston** \u2013 part coach, part operator.\nObjective: guide a natural conversation that fills the `goal_gap` object and triggers the `smart_sprint` tool.\n\n---\n\n## \ud83e\udde0 1 \u00b7 USER SKILL ASSESSMENT\n\n1. **Open friendly:**\n\n   > \u201cWhat\u2019s something you\u2019re great at that most people find hard?\u201d\n\n2. **Dig deeper, one question at a time:**\n\n   * \u201cAny proof points \u2013 projects, results, certificates?\u201d\n   * \u201cWhat topics or tools do you nerd out on?\u201d\n\n3. **If unsure:**\n\n   > \u201cNo worries. Which markets or problems simply *interest* you?\u201d\n\n4. **Check-in:**\n\n   > \u201cAll clear so far?\u201d \u2013 wait for yes before moving on.\n\n---\n\n## \ud83d\udd0b 2 \u00b7 WORKSTYLE CHECK-IN\n\n> \u201cQuick rhythm check \u2013 short answers are fine.\u201d\n\nAsk **one question, wait, then the next**:\n\n1. Focus hours per day?\n2. Peak energy: morning / afternoon / night?\n3. Preference: steady pace or intense sprints?\n4. Self-discipline 1-10?\n5. Constraints (job, family, budget, etc.)?\n\n**Summarise & confirm:**\n\n> \u201cSounds like a **\\[Sprinter/Marathoner/Dabbler]**, \\~X focus hours, best in the \\[time window], main constraint: \\[constraint]. That right?\u201d\n\n---\n\n## \ud83d\udd0d 3 \u00b7 MARKET VALIDATION  (**one option at a time**)\n\n> \u201cI\u2019ll scan for three profitable, low-regulation angles. I\u2019ll give them **one by one** so it\u2019s easy to digest.\u201d\n\nFor **each** option:\n\n* **Name**\n* **Plain-English One-liner:** *\u201cHelps \\[who] do \\[what] so they can \\[benefit].\u201d*\n* **Target customer** (industry \u00b7 revenue \u00b7 team size)\n* **Core pain points**\n\nThen ask:\n\n> \u201cDoes this feel like a fit, need tweaks, or skip?\u201d\n\n*If skip \u2192 give the next option.*\n*Stop when the user picks one.*\nStore choice as `chosen_venture`.\n\n---\n\n## \ud83d\udce3 4 \u00b7 DISTRIBUTION STRATEGY\n\n1. Suggest top 2-3 platforms for that customer.\n2. Ask on-camera comfort.\n3. Ask content style (step-by-step, story, visuals).\n4. Ask desired vibe (Expert, Operator, Thought-leader).\n5. **Confirm understanding:**\n\n   > \u201cSound good?\u201d\n\nPopulate `distribution_strategy`.\n\n---\n\n## \ud83c\udfaf 5 \u00b7 SPRINT CREATION\n\n> \u201cGreat. Using your info, I\u2019m building your 14-day SMART sprint now.\u201d\n\n(Internally send `goal_gap` to `smart_sprint`.)\n\n---\n\n## \u2705 6 \u00b7 WRAP-UP\n\nTell them:\n\n> \u201cYou\u2019ll get **one short task per day** by text. Send proof, I\u2019ll check in. After two weeks we review results.\u201d\n> \u201cReady to lock in for 14 days?\u201d\n\n---\n\n### Tone Rules\n\n* Plain, outcome-focused language.\n* Only one chunk of info before pausing for feedback.\n* Frequent \u201cAll clear?\u201d check-ins to keep engagement high.\n",
+                          "role": "system"
+                        }
+                      ],
+                      "toolIds": [
+                        "6e6b0c4f-e4c7-457b-8065-d1bba8ababff"
+                      ],
+                      "provider": "openai"
+                    },
+                    "voice": {
+                      "model": "sonic-2",
+                      "voiceId": "42b39f37-515f-4eee-8546-73e841679c1d",
+                      "provider": "cartesia",
+                      "experimentalControls": {
+                        "speed": "normal"
+                      }
+                    },
+                    "firstMessage": "Hey, are you ready to start?",
+                    "voicemailMessage": "Hello, this is Riley from Wellness Partners. I'm calling about your appointment. Please call us back at your earliest convenience so we can confirm your scheduling details.",
+                    "endCallMessage": "Perfect! Your appointment has been scheduled. You'll receive a confirmation email shortly. Have a great day!",
+                    "endCallFunctionEnabled": true,
+                    "hipaaEnabled": false,
+                    "clientMessages": [
+                      "conversation-update",
+                      "function-call",
+                      "hang",
+                      "model-output",
+                      "speech-update",
+                      "status-update",
+                      "transfer-update",
+                      "transcript",
+                      "tool-calls",
+                      "user-interrupted",
+                      "voice-input",
+                      "workflow.node.started"
+                    ],
+                    "serverMessages": [
+                      "conversation-update",
+                      "end-of-call-report",
+                      "function-call",
+                      "hang",
+                      "speech-update",
+                      "status-update",
+                      "tool-calls",
+                      "transfer-destination-request",
+                      "user-interrupted"
+                    ],
+                    "backgroundDenoisingEnabled": true,
+                    "startSpeakingPlan": {
+                      "waitSeconds": 0.4,
+                      "transcriptionEndpointingPlan": {
+                        "onPunctuationSeconds": 0.1,
+                        "onNoPunctuationSeconds": 1.5,
+                        "onNumberSeconds": 0.5
+                      },
+                      "smartEndpointingPlan": {
+                        "provider": "livekit",
+                        "waitFunction": "20 + 500 * sqrt(x) + 2500 * x^3"
+                      }
+                    }
+                  },
+                  "assistantOverrides": {
+                    "clientMessages": [
+                      "transfer-update",
+                      "transcript"
+                    ]
+                  }
+                },
+                "assistant": {
+                  "name": "Houston",
+                  "transcriber": {
+                    "model": "nova-3",
+                    "language": "en",
+                    "provider": "deepgram"
+                  },
+                  "model": {
+                    "model": "gpt-4.1-mini",
+                    "temperature": 0.5,
+                    "messages": [
+                      {
+                        "content": "## \ud83d\ude80 ROLE\n\nYou\u2019re **Houston** \u2013 part coach, part operator.\nObjective: guide a natural conversation that fills the `goal_gap` object and triggers the `smart_sprint` tool.\n\n---\n\n## \ud83e\udde0 1 \u00b7 USER SKILL ASSESSMENT\n\n1. **Open friendly:**\n\n   > \u201cWhat\u2019s something you\u2019re great at that most people find hard?\u201d\n\n2. **Dig deeper, one question at a time:**\n\n   * \u201cAny proof points \u2013 projects, results, certificates?\u201d\n   * \u201cWhat topics or tools do you nerd out on?\u201d\n\n3. **If unsure:**\n\n   > \u201cNo worries. Which markets or problems simply *interest* you?\u201d\n\n4. **Check-in:**\n\n   > \u201cAll clear so far?\u201d \u2013 wait for yes before moving on.\n\n---\n\n## \ud83d\udd0b 2 \u00b7 WORKSTYLE CHECK-IN\n\n> \u201cQuick rhythm check \u2013 short answers are fine.\u201d\n\nAsk **one question, wait, then the next**:\n\n1. Focus hours per day?\n2. Peak energy: morning / afternoon / night?\n3. Preference: steady pace or intense sprints?\n4. Self-discipline 1-10?\n5. Constraints (job, family, budget, etc.)?\n\n**Summarise & confirm:**\n\n> \u201cSounds like a **\\[Sprinter/Marathoner/Dabbler]**, \\~X focus hours, best in the \\[time window], main constraint: \\[constraint]. That right?\u201d\n\n---\n\n## \ud83d\udd0d 3 \u00b7 MARKET VALIDATION  (**one option at a time**)\n\n> \u201cI\u2019ll scan for three profitable, low-regulation angles. I\u2019ll give them **one by one** so it\u2019s easy to digest.\u201d\n\nFor **each** option:\n\n* **Name**\n* **Plain-English One-liner:** *\u201cHelps \\[who] do \\[what] so they can \\[benefit].\u201d*\n* **Target customer** (industry \u00b7 revenue \u00b7 team size)\n* **Core pain points**\n\nThen ask:\n\n> \u201cDoes this feel like a fit, need tweaks, or skip?\u201d\n\n*If skip \u2192 give the next option.*\n*Stop when the user picks one.*\nStore choice as `chosen_venture`.\n\n---\n\n## \ud83d\udce3 4 \u00b7 DISTRIBUTION STRATEGY\n\n1. Suggest top 2-3 platforms for that customer.\n2. Ask on-camera comfort.\n3. Ask content style (step-by-step, story, visuals).\n4. Ask desired vibe (Expert, Operator, Thought-leader).\n5. **Confirm understanding:**\n\n   > \u201cSound good?\u201d\n\nPopulate `distribution_strategy`.\n\n---\n\n## \ud83c\udfaf 5 \u00b7 SPRINT CREATION\n\n> \u201cGreat. Using your info, I\u2019m building your 14-day SMART sprint now.\u201d\n\n(Internally send `goal_gap` to `smart_sprint`.)\n\n---\n\n## \u2705 6 \u00b7 WRAP-UP\n\nTell them:\n\n> \u201cYou\u2019ll get **one short task per day** by text. Send proof, I\u2019ll check in. After two weeks we review results.\u201d\n> \u201cReady to lock in for 14 days?\u201d\n\n---\n\n### Tone Rules\n\n* Plain, outcome-focused language.\n* Only one chunk of info before pausing for feedback.\n* Frequent \u201cAll clear?\u201d check-ins to keep engagement high.\n",
+                        "role": "system"
+                      }
+                    ],
+                    "toolIds": [
+                      "6e6b0c4f-e4c7-457b-8065-d1bba8ababff"
+                    ],
+                    "provider": "openai",
+                    "tools": [
+                      {
+                        "id": "6e6b0c4f-e4c7-457b-8065-d1bba8ababff",
+                        "createdAt": "2025-05-28T14:40:38.361Z",
+                        "updatedAt": "2025-05-28T17:12:31.261Z",
+                        "type": "function",
+                        "function": {
+                          "name": "market_research",
+                          "strict": false,
+                          "parameters": {
+                            "type": "object",
+                            "required": [
+                              "user_insights"
+                            ],
+                            "properties": {
+                              "user_insights": {
+                                "type": "string",
+                                "description": "{\n  \"specialty\": \"string\",\n  \"certifications\": [\"string\"],\n  \"interests\": [\"string\"],\n  \"work_style\": \"Marathoner | Sprinter | Dabbler\",\n  \"daily_hours_available\": number,\n  \"constraints\": [\"string\"]\n}"
+                              }
+                            }
+                          },
+                          "description": "Analyzes the user\u2019s service profile and aligns it with real-time market data. Returns a list of validated service opportunities (Goldilocks Ventures), including ideal customers, positioning, pricing, and fast-launch potential."
+                        },
+                        "orgId": "63d7f49f-550e-4cd2-96a8-bad5c0f2d68f",
+                        "server": {
+                          "url": "https://n8n-zojsl-u45830.vm.elestio.app/webhook/market-research",
+                          "headers": {}
+                        },
+                        "async": true
+                      }
+                    ]
+                  },
+                  "voice": {
+                    "model": "sonic-2",
+                    "voiceId": "42b39f37-515f-4eee-8546-73e841679c1d",
+                    "provider": "cartesia",
+                    "experimentalControls": {
+                      "speed": "normal"
+                    }
+                  },
+                  "firstMessage": "Hey, are you ready to start?",
+                  "voicemailMessage": "Hello, this is Riley from Wellness Partners. I'm calling about your appointment. Please call us back at your earliest convenience so we can confirm your scheduling details.",
+                  "endCallMessage": "Perfect! Your appointment has been scheduled. You'll receive a confirmation email shortly. Have a great day!",
+                  "endCallFunctionEnabled": true,
+                  "hipaaEnabled": false,
+                  "clientMessages": [
+                    "conversation-update",
+                    "function-call",
+                    "hang",
+                    "model-output",
+                    "speech-update",
+                    "status-update",
+                    "transfer-update",
+                    "transcript",
+                    "tool-calls",
+                    "user-interrupted",
+                    "voice-input",
+                    "workflow.node.started"
+                  ],
+                  "serverMessages": [
+                    "conversation-update",
+                    "end-of-call-report",
+                    "function-call",
+                    "hang",
+                    "speech-update",
+                    "status-update",
+                    "tool-calls",
+                    "transfer-destination-request",
+                    "user-interrupted"
+                  ],
+                  "backgroundDenoisingEnabled": true,
+                  "startSpeakingPlan": {
+                    "waitSeconds": 0.4,
+                    "transcriptionEndpointingPlan": {
+                      "onPunctuationSeconds": 0.1,
+                      "onNoPunctuationSeconds": 1.5,
+                      "onNumberSeconds": 0.5
+                    },
+                    "smartEndpointingPlan": {
+                      "provider": "livekit",
+                      "waitFunction": "20 + 500 * sqrt(x) + 2500 * x^3"
+                    }
+                  }
+                }
+              }
+            },
+            "webhookUrl": "https://n8n-zojsl-u45830.vm.elestio.app/webhook/market-research",
+            "executionMode": "production"
+          }
+        }
+      ]
+    },
+    "versionId": "0fe9e14d-7145-4f99-a48b-0e4463bb41fa",
+    "triggerCount": 2,
+    "tags": []
+  },
+  {
+    "createdAt": "2025-06-04T18:44:47.199Z",
+    "updatedAt": "2025-06-05T13:48:17.595Z",
+    "id": "pKSYcKayE5sgwlgf",
+    "name": "N8N Reference Generator",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "value": "gpt-4.1-mini",
+            "mode": "list",
+            "cachedResultName": "GPT-4.1-MINI"
+          },
+          "messages": {
+            "values": [
+              {
+                "content": "=# n8n Template Reference Document Generator\n\nYou are an expert n8n workflow analyst tasked with creating business-friendly reference documents for n8n automation templates. Your goal is to help business owners and educated laypeople understand what each automation does and what services they'll need to set it up.\n\n## Input\nYou will receive n8n template JSON files containing workflow configurations, nodes, credentials, and parameters.\n\n## Your Task\nAnalyze the template and generate a reference document following the EXACT format below.\n\n## Output Format Template\n\n```\n# [Template Title - Extract from template name or create descriptive title]\n**Category**: [Main Category] > [Subcategory] | **Difficulty**: [Beginner/Intermediate/Advanced] | **Setup Time**: [X minutes]\n\n## Services & APIs Required\n\n### Required Services\n- **[Service Name]** - [Brief description of what it does in this automation]\n- **[Service Name]** - [Brief description of what it does in this automation]\n- **[Service Name]** - [Brief description of what it does in this automation]\n\n### API Keys Needed\n- **[API Name]** - [What this API key is used for]\n- **[API Name]** - [What this API key is used for]\n\n### Accounts Required\n- **[Service Account]** - [Where to sign up, e.g., \"Sign up at platform.openai.com\"]\n- **[Service Account]** - [Where to sign up]\n\n## Quick Overview\n[One clear sentence describing what this automation does in plain English]\n\n**Solves**: [The business problem this addresses]\n**Benefits**: \n- [Benefit 1]\n- [Benefit 2]\n- [Benefit 3]\n- [Benefit 4]\n\n## Perfect For\n- **[User Type]** - [Specific use case]\n- **[User Type]** - [Specific use case]\n- **[Industry/Context]** - [When this applies]\n\n## What It Does\n1. **[Trigger Step]**: [What starts the automation]\n2. **[Processing Step]**: [What happens to the data]\n3. **[Output Step]**: [Where the result goes]\n4. **[Confirmation Step]**: [How user knows it worked]\n\n## Service Requirements\n### Required (Automation won't work without these)\n- **[Service]** - [What it does in the workflow]\n- **[Service]** - [What it does in the workflow]\n\n### Optional Enhancements\n- **[Service]** - [How it could enhance the automation]\n- **[Service]** - [Alternative or additional functionality]\n```\n\n## Analysis Instructions\n\n### 1. Extract Template Information\n- **Template Name**: Look for \"name\" field in the JSON\n- **Nodes**: Analyze the \"nodes\" array to identify all services used\n- **Credentials**: Look for \"credentials\" objects to identify required API keys\n- **Triggers**: Identify what starts the workflow (webhooks, schedules, manual triggers)\n\n### 2. Identify Services and APIs\nFrom the nodes array, extract:\n- **AI Services**: OpenAI, Claude, Gemini, Mistral, etc.\n- **Database Services**: Google Sheets, Airtable, Notion, PostgreSQL, etc.\n- **Communication Services**: Gmail, Slack, Discord, Telegram, etc.\n- **Storage Services**: Google Drive, Dropbox, AWS S3, etc.\n- **Specialized Services**: Qdrant, Pinecone, LlamaParse, etc.\n\n### 3. Determine Difficulty Level\n- **Beginner**: Uses common services (Google Sheets, OpenAI), simple workflow\n- **Intermediate**: Multiple services, some configuration required\n- **Advanced**: Complex integrations, vector databases, custom APIs\n\n### 4. Estimate Setup Time\n- **Simple workflows**: 15-30 minutes\n- **Medium complexity**: 30-60 minutes  \n- **Complex workflows**: 60+ minutes\n\n### 5. Create Business-Friendly Descriptions\n- Use plain English, avoid technical jargon\n- Focus on business value and outcomes\n- Explain what each service contributes to the solution\n- Make it clear what problem this solves\n\n### 6. Categorize Appropriately\nUse these main categories:\n- Financial Automation (expense tracking, invoicing, reporting, compliance)\n- Marketing Automation (social media, email campaigns, content creation, analytics)\n- Sales Automation (CRM integration, lead qualification, outreach automation, pipeline management)\n- HR Automation (recruitment, performance, onboarding)\n- Document Management (translation, summarization, organization, processing)\n- Customer Support (chatbots, ticket management, knowledge base)\n- Data Processing (ETL, analysis, reporting)\n- Industry Specific (healthcare, legal, real estate, etc.)\n\n## Key Requirements\n1. **Be Accurate**: Only list services that are actually used in the template\n2. **Be Clear**: Use business language, not technical terms\n3. **Be Complete**: Don't miss any required services or APIs\n4. **Be Helpful**: Focus on what the business owner needs to know\n5. **Follow Format Exactly**: Use the exact structure and markdown formatting provided\n\n## Example Analysis Process\nWhen you see a node like:\n```json\n{\n  \"name\": \"OpenAI Chat Model\",\n  \"type\": \"@n8n/n8n-nodes-langchain.lmChatOpenAi\",\n  \"credentials\": {\n    \"openAiApi\": {\n      \"id\": \"abc123\",\n      \"name\": \"OpenAi account\"\n    }\n  }\n}\n```\n\nYou should identify:\n- **Service**: OpenAI\n- **Purpose**: AI text processing/chat responses\n- **API Key Needed**: OpenAI API Key\n- **Account Required**: OpenAI Account (platform.openai.com)\n\nNow analyze the provided n8n template and generate the reference document following this exact format.",
+                "role": "system"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.openAi",
+        "typeVersion": 1.8,
+        "position": [
+          300,
+          -240
+        ],
+        "id": "6363dc44-9d16-4270-8353-aea837e233c4",
+        "name": "OpenAI",
+        "credentials": {
+          "openAiApi": {
+            "id": "i7d2jX8gbgXWRPZy",
+            "name": "OpenAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "templates",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -140,
+          -240
+        ],
+        "id": "7827115c-6b17-429e-9bbb-daa3f5c24112",
+        "name": "Webhook",
+        "webhookId": "9db76423-097b-485b-a0a1-133be9adfdb1"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.limit",
+        "typeVersion": 1,
+        "position": [
+          80,
+          -240
+        ],
+        "id": "84f6f848-44f3-4d30-ac28-27da977c8450",
+        "name": "Limit"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "585af18e-15d6-4982-aa4c-2cc1100670ce",
+                "name": "message.content",
+                "value": "={{ $json.message.content }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          660,
+          -240
+        ],
+        "id": "0c57b25e-e323-43b5-b92d-73460e9f09d0",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.3,
+        "position": [
+          880,
+          -240
+        ],
+        "id": "f0fd06bf-eade-4391-bb5c-a2d2b87053fb",
+        "name": "Respond to Webhook"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Limit",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Limit": {
+        "main": [
+          [
+            {
+              "node": "OpenAI",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+      "Webhook": [
+        {
+          "json": {
+            "headers": {
+              "host": "n8n-zojsl-u45830.vm.elestio.app",
+              "x-real-ip": "24.141.63.158",
+              "x-forwarded-for": "24.141.63.158",
+              "x-forwarded-proto": "https",
+              "x-forwarded-port": "443",
+              "connection": "close",
+              "content-length": "9112",
+              "content-type": "multipart/form-data; boundary=----formdata-undici-004251638673",
+              "accept": "*/*",
+              "accept-language": "*",
+              "sec-fetch-mode": "cors",
+              "user-agent": "node",
+              "accept-encoding": "br, gzip, deflate"
+            },
+            "params": {},
+            "query": {},
+            "body": {
+              "fileName": "Angie, Personal AI Assistant with Telegram Voice and Text.txt",
+              "fileType": "text/plain",
+              "fileSize": "8535"
+            },
+            "webhookUrl": "https://n8n-zojsl-u45830.vm.elestio.app/webhook/templates",
+            "executionMode": "production"
+          }
+        }
+      ]
+    },
+    "versionId": "d096fcf2-7f7e-47d3-a55e-8bb8c5f5af92",
+    "triggerCount": 1,
+    "tags": []
+  },
+  {
+    "createdAt": "2025-05-29T20:05:43.617Z",
+    "updatedAt": "2025-06-04T15:01:24.281Z",
+    "id": "kHSQycJ8ncgfXMqG",
+    "name": "Telegram Image Editior",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=**Image description:**  \n{{ $json.content }}\n\n**User edit request:**  \n{{ $('Information Extractor1').item.json.output.edit }}\n\n**Image url:** \n{{ $('Information Extractor1').item.json.output.image_url }}\n\n**image url_2:**\n",
+          "options": {
+            "systemMessage": "=You are a photo editing prompt engineer for the FLUX.1 Kontext Pro model.\n\nFor each request, you will be provided with:\n- **Image description:** A factual summary of what appears in the input image.\n- **User edit request:** A natural-language description of the desired change.\n\nYour task:\n- Write a single, specific, actionable prompt for the image editing model.\n- Use details from the image description to reference specific subjects, colors, objects, and layout in your instruction.\n- Incorporate the user\u2019s requested change in a way that fits the context of the actual image.\n- Clearly state what should be changed and what should remain unchanged.\n- Use direct action verbs (add, remove, change, replace).\n- Break down complex edits into clear, sequential actions if needed.\n- For style or text edits, follow FLUX.1 Kontext Pro best practices (e.g., quote new text, describe art style).\n- If any aspect of the user\u2019s request is unclear, make reasonable assumptions based on the image description, and state them.\n- Never use vague or generic terms; be as specific as possible.\n\n**Always output only the final enhanced prompt as a single, direct instruction referencing the actual image.**\n\n---\n\n### Example\n\n**Image description:**  \nA daytime street photo showing a blue compact car parked in front of a red brick building with green awnings. Two pedestrians are walking on the sidewalk.\n\n**User edit request:**  \n\"Make the sky look dramatic.\"\n\n**Enhanced output prompt:**  \nChange the sky in the daytime street photo to dramatic, vivid sunset colors with bold orange and deep purple tones. Keep the blue car, red brick building, green awnings, and pedestrians unchanged.\n\n---\n\n**Image description:**  \nA close-up of a street sign with the word \"WELCOME\" in black text on a white background, attached to a metal pole.\n\n**User edit request:**  \n\"Remove the text and write 'OPEN'.\"\n\n**Enhanced output prompt:**  \nRemove the word \"WELCOME\" from the street sign and replace it with the word \"OPEN\" in clear, black text, matching the original font style, size, and position. Keep the sign's white background and the metal pole unchanged.\n\nThe FLUX.1 Kontext model offers flexible aspect ratio settings to accommodate various editing needs.([Replicate][1])\n\n### \ud83d\udcd0 Supported Aspect Ratios\n\nYou can specify the desired aspect ratio for the generated image using predefined values such as:\n\n* `1:1`\n* `4:3`\n* `16:9`\n* `9:16`\n* `2:3`\n* `3:4`\n\n### OUTPUT\nReturn the output url of the image\n\n\n## Basic model info\n\nModel name: flux-kontext-apps/multi-image-kontext\nModel description: An experimental FLUX Kontext model that can combine two input images\n\n\n## Model inputs\n\n- prompt: Text description of how to combine or transform the two input images (string)\n- input_image_1: First input image. Must be jpeg, png, gif, or webp. (string)\n- input_image_2: Second input image. Must be jpeg, png, gif, or webp. (string)\n- aspect_ratio: Aspect ratio of the generated image. Use 'match_input_image' to match the aspect ratio of the input image. (string)\n- seed: Random seed. Set for reproducible generation (integer)\n\n\n## Model output schema\n\n{\n  \"type\": \"string\",\n  \"title\": \"Output\",\n  \"format\": \"uri\"\n}\n\nIf the input or output schema includes a format of URI, it is referring to a file.\n\n\n## Example inputs and outputs\n\nUse these example outputs to better understand the types of inputs the model accepts, and the types of outputs the model returns:\n\n### Example (https://replicate.com/p/y9khwmsxxsrme0cq3hh8b1rpbc)\n\n#### Input\n\n```json\n{\n  \"prompt\": \"Put Elsa and Mona Lisa dancing together at a deep house rave\",\n  \"aspect_ratio\": \"3:2\",\n  \"input_image_1\": \"https://replicate.delivery/pbxt/N5qwPSq6UtqIHdHfJmrntyLNGeCpHIF7BrJ7KwWvw0mOOhFv/elsa.jpg\",\n  \"input_image_2\": \"https://replicate.delivery/pbxt/N5qwP15NEUY6uYQKeX65DNlpLmpOpbkIZAOseLRur0XM6ymW/mona-lisa.png\"\n}\n```\n\n#### Output"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 2,
+        "position": [
+          96,
+          440
+        ],
+        "id": "a0b22c78-2101-4aaa-956c-a7d75c474aa7",
+        "name": "prompt rewriter1"
+      },
+      {
+        "parameters": {
+          "text": "=extract image edit description and url:\n{{ $('Telegram Trigger1').item.json.message.text }}",
+          "attributes": {
+            "attributes": [
+              {
+                "name": "edit",
+                "description": "description of the changes to be made to the image",
+                "required": true
+              },
+              {
+                "name": "image_url",
+                "description": "the url of the image",
+                "required": true
+              },
+              {
+                "name": "aspect_ratio",
+                "description": "the aspect ratio of the image"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+        "typeVersion": 1.1,
+        "position": [
+          -500,
+          440
+        ],
+        "id": "ba42b410-414e-4875-bf42-e557657c41a3",
+        "name": "Information Extractor1"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "3ad3efc4-99f5-49f2-be06-c16e1dd6832e",
+                "name": "output",
+                "value": "={{ $json.output }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          472,
+          440
+        ],
+        "id": "f967bf1c-87f2-4b8b-ae34-f8d14cdc8d6c",
+        "name": "Edit Fields1"
+      },
+      {
+        "parameters": {
+          "url": "={{ $json.output }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          692,
+          440
+        ],
+        "id": "0deb2211-aa46-4f4d-95ff-a9f96250b99a",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "updates": [
+            "message"
+          ],
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.telegramTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -940,
+          440
+        ],
+        "id": "6ee8c089-4d0d-4e8f-9df4-902e53a9a2ab",
+        "name": "Telegram Trigger1",
+        "webhookId": "8f498e62-c8cf-4618-8bd5-2c47aeb6926d",
+        "credentials": {
+          "telegramApi": {
+            "id": "45WbvkzPDzDd01dn",
+            "name": "Telegram account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "chatId": "={{ $('set').item.json.chat_id }}",
+          "text": "={{ $json.output }}",
+          "additionalFields": {
+            "appendAttribution": false
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          912,
+          440
+        ],
+        "id": "c407d8d8-991e-4230-9e22-c28d5764128a",
+        "name": "return image",
+        "webhookId": "b88445ee-9c7b-4b06-8865-80235b2bd205",
+        "credentials": {
+          "telegramApi": {
+            "id": "45WbvkzPDzDd01dn",
+            "name": "Telegram account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "8ab76458-5e6f-4ab6-875d-8de8f4e2a922",
+                "name": "chat_id",
+                "value": "={{ $json.message.chat.id }}",
+                "type": "number"
+              },
+              {
+                "id": "c28ae546-1488-43fa-a667-81d9ff00efcf",
+                "name": "message_text",
+                "value": "={{ $json.message.text }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -720,
+          440
+        ],
+        "id": "16523628-7007-4a44-bded-9941f56ba857",
+        "name": "set"
+      },
+      {
+        "parameters": {
+          "resource": "image",
+          "operation": "analyze",
+          "modelId": {
+            "__rl": true,
+            "value": "gpt-4.1-2025-04-14",
+            "mode": "id"
+          },
+          "text": "=analyze the image thouroughly. Then return a visual description of it's contents. must be less than 250 characters. ",
+          "imageUrls": "=https://i.ytimg.com/vi/h8-qemIbXbo/maxresdefault.jpg",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.openAi",
+        "typeVersion": 1.8,
+        "position": [
+          -120,
+          440
+        ],
+        "id": "38abd2ea-45f5-4276-8a00-3bc4f25c908c",
+        "name": "image analyze",
+        "credentials": {
+          "openAiApi": {
+            "id": "i7d2jX8gbgXWRPZy",
+            "name": "OpenAi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.replicate.com/v1/models/flux-kontext-apps/multi-image-kontext/predictions",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer YOUR_REPLICATE_API_TOKEN_HERE"
+              },
+              {
+                "name": "Prefer",
+                "value": "wait"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"input\": {\n    \"prompt\": \"Put the woman into a white t-shirt with the text on it\",\n    \"aspect_ratio\": \"1:1\",\n    \"input_image_1\": \"{{$fromAI(\"imageurl_1\")}}\",\n    \"input_image_2\": \"{{$fromAI(\"imageurl_2\")}}\"\"\n  }\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequestTool",
+        "typeVersion": 4.2,
+        "position": [
+          340,
+          680
+        ],
+        "id": "c2e0b500-f167-4278-947c-10d3a7042af3",
+        "name": "multi-image"
+      },
+      {
+        "parameters": {
+          "toolDescription": "=This tool edits an image found at a url with text prompts",
+          "method": "POST",
+          "url": "=https://api.replicate.com/v1/models/black-forest-labs/flux-kontext-pro/predictions",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "=Bearer YOUR_REPLICATE_API_TOKEN_HERE"
+              },
+              {
+                "name": "Prefer",
+                "value": "wait"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"input\": {\n    \"prompt\": \"{{$fromAI(\"image_prompt\")}}\",\n    \"input_image\": \"{{$fromAI(\"input_image_url\")}}\",\n    \"aspect_ratio\": \"{{$fromAI(\"aspect_ratio\")}}\"\n  }\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequestTool",
+        "typeVersion": 4.2,
+        "position": [
+          80,
+          680
+        ],
+        "id": "fc96603a-3945-460b-9750-bf36d10f3ae8",
+        "name": "single image"
+      },
+      {
+        "parameters": {
+          "model": "deepseek/deepseek-r1",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+        "typeVersion": 1,
+        "position": [
+          -260,
+          660
+        ],
+        "id": "b52f583f-f1b5-40cf-a2d4-fabc4b1e8760",
+        "name": "OpenRouter Chat Model",
+        "credentials": {
+          "openRouterApi": {
+            "id": "0yfaapxeIUK1TNZx",
+            "name": "OpenRouter account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "prompt rewriter1": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Information Extractor1": {
+        "main": [
+          [
+            {
+              "node": "image analyze",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields1": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "return image",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Telegram Trigger1": {
+        "main": [
+          [
+            {
+              "node": "set",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "set": {
+        "main": [
+          [
+            {
+              "node": "Information Extractor1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "image analyze": {
+        "main": [
+          [
+            {
+              "node": "prompt rewriter1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "multi-image": {
+        "ai_tool": [
+          [
+            {
+              "node": "prompt rewriter1",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "single image": {
+        "ai_tool": [
+          [
+            {
+              "node": "prompt rewriter1",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenRouter Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Information Extractor1",
+              "type": "ai_languageModel",
+              "index": 0
+            },
+            {
+              "node": "prompt rewriter1",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+      "Telegram Trigger1": [
+        {
+          "json": {
+            "update_id": 747513556,
+            "message": {
+              "message_id": 249,
+              "from": {
+                "id": 7178822911,
+                "is_bot": false,
+                "first_name": "Chris",
+                "last_name": "Ike",
+                "language_code": "en"
+              },
+              "chat": {
+                "id": 7178822911,
+                "first_name": "Chris",
+                "last_name": "Ike",
+                "type": "private"
+              },
+              "date": 1748652553,
+              "text": "Make this as photorealistic as you can.\n\nhttps://ago.ca/sites/default/files/styles/image_large/public/2018-08/AGO.79171_rsz.jpg",
+              "entities": [
+                {
+                  "offset": 41,
+                  "length": 86,
+                  "type": "url"
+                }
+              ],
+              "link_preview_options": {
+                "url": "https://ago.ca/sites/default/files/styles/image_large/public/2018-08/AGO.79171_rsz.jpg"
+              }
+            }
+          }
+        }
+      ],
+      "Information Extractor1": [
+        {
+          "json": {
+            "output": {
+              "edit": "Make this as photorealistic as you can.",
+              "image_url": "https://ago.ca/sites/default/files/styles/image_large/public/2018-08/AGO.79171_rsz.jpg"
+            }
+          }
+        }
+      ],
+      "image analyze": [
+        {
+          "json": {
+            "content": "A surprised man with glasses is centered, surrounded by floating YouTube icons, bold yellow \"YOUTUBE\" text, and \"THUMBNAIL DESIGN\" written in white on a vibrant orange background."
+          }
+        }
+      ],
+      "set": [
+        {
+          "json": {
+            "chat_id": 7178822911,
+            "message_text": "Make this as photorealistic as you can.\n\nhttps://ago.ca/sites/default/files/styles/image_large/public/2018-08/AGO.79171_rsz.jpg"
+          }
+        }
+      ]
+    },
+    "versionId": "4fa5161b-a42b-4e32-b842-f5d3e5cabdc0",
+    "triggerCount": 1,
+    "tags": []
+  },
+  {
+    "createdAt": "2025-06-02T21:29:05.415Z",
+    "updatedAt": "2025-06-04T15:07:05.920Z",
+    "id": "z0nShPW77gfEfcHC",
+    "name": "Reddit MCP",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "path": "Reddit-MCP"
+        },
+        "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+        "typeVersion": 1,
+        "position": [
+          32,
+          0
+        ],
+        "id": "76fe3a31-fee6-43d8-b2e9-b4b4f7290ae7",
+        "name": "MCP Server Trigger",
+        "webhookId": "48521f82-adb2-48e2-ba79-2de1d5f3975f"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "subreddit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subreddit', ``, 'string') }}",
+          "postId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Post_ID', ``, 'string') }}"
+        },
+        "type": "n8n-nodes-base.redditTool",
+        "typeVersion": 1,
+        "position": [
+          40,
+          220
+        ],
+        "id": "7ec3a927-c0cd-4b95-a4bd-fef2349c4048",
+        "name": "Get Reddit Post",
+        "credentials": {
+          "redditOAuth2Api": {
+            "id": "R1lChmznsaD0zN5Z",
+            "name": "Reddit account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "search",
+          "subreddit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subreddit', ``, 'string') }}",
+          "keyword": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Keyword', ``, 'string') }}",
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+          "limit": 3,
+          "additionalFields": {
+            "sort": "hot"
+          }
+        },
+        "type": "n8n-nodes-base.redditTool",
+        "typeVersion": 1,
+        "position": [
+          360,
+          220
+        ],
+        "id": "840b4bf6-9c5b-4657-98af-65e49221ac8f",
+        "name": "Search Reddit Posts",
+        "credentials": {
+          "redditOAuth2Api": {
+            "id": "R1lChmznsaD0zN5Z",
+            "name": "Reddit account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "postComment",
+          "operation": "getAll",
+          "subreddit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subreddit', ``, 'string') }}",
+          "postId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Post_ID', ``, 'string') }}",
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}"
+        },
+        "type": "n8n-nodes-base.redditTool",
+        "typeVersion": 1,
+        "position": [
+          180,
+          220
+        ],
+        "id": "635cdbf9-36b2-49b1-b5e8-ab1df10539db",
+        "name": "Get Reddit Comments",
+        "credentials": {
+          "redditOAuth2Api": {
+            "id": "R1lChmznsaD0zN5Z",
+            "name": "Reddit account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Get Reddit Post": {
+        "ai_tool": [
+          [
+            {
+              "node": "MCP Server Trigger",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search Reddit Posts": {
+        "ai_tool": [
+          [
+            {
+              "node": "MCP Server Trigger",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Reddit Comments": {
+        "ai_tool": [
+          [
+            {
+              "node": "MCP Server Trigger",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "bd1bd8ed-4579-4b8e-bfb9-ccd41c54bccd",
+    "triggerCount": 1,
+    "tags": []
+  }
+]

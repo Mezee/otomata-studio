@@ -1,0 +1,9 @@
+workflows/Customer Support/
+workflows/Document & Content/
+workflows/Education/
+workflows/Finance/
+workflows/Human Resources/
+workflows/IT & Data Management/
+workflows/Manufacturing/
+workflows/Marketing/
+workflows/Sales/
